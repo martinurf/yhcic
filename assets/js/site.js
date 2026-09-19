@@ -442,10 +442,8 @@
     $$(".fld__e", form).forEach(function (p) { p.textContent = ""; });
     $$('[aria-invalid="true"]', form).forEach(function (i) { i.removeAttribute("aria-invalid"); });
     var status = $("#applyStatus"); if (status) { status.textContent = ""; status.removeAttribute("data-tone"); }
-    var count = $("#whyCount"); if (count) count.textContent = "0";
     form.hidden = false; done.hidden = true;
     REF = makeRef();
-    var refEl = $("#applyRef"); if (refEl) refEl.textContent = REF;
   }
 
   function wireOverlays() {
@@ -505,7 +503,6 @@
   function buildApply() {
     var A = C.application || {};
     REF = makeRef();
-    var refEl = $("#applyRef"); if (refEl) refEl.textContent = REF;
 
     var sel = $("#a-year");
     if (sel) {
@@ -516,20 +513,6 @@
     if (src) {
       src.innerHTML = '<option value="">Prefer not to say</option>' +
         (A.referralSources || []).map(function (s) { return '<option value="' + esc(s) + '">' + esc(s) + '</option>'; }).join("");
-    }
-    var picks = $("#applyPicks");
-    if (picks) {
-      picks.innerHTML = (A.interests || []).map(function (t, i) {
-        return '<label class="pick">' +
-          '<input type="checkbox" name="interests" value="' + esc(t) + '" id="pk-' + i + '">' +
-          '<span class="box" aria-hidden="true"></span>' +
-          '<span class="lbl">' + esc(t) + '</span></label>';
-      }).join("");
-    }
-    var why = $("#a-why"), count = $("#whyCount");
-    if (why && count) {
-      why.setAttribute("maxlength", "600");
-      why.addEventListener("input", function () { count.textContent = why.value.length; });
     }
   }
 
@@ -548,10 +531,8 @@
       gradYear: $("#a-year").value,
       major: $("#a-major").value.trim(),
       referral: $("#a-src").value,
-      interests: $$('input[name="interests"]:checked').map(function (i) { return i.value; }),
       experience: $("#a-exp").value.trim(),
-      why: $("#a-why").value.trim(),
-      linkedin: $("#a-li").value.trim(),
+      phone: $("#a-phone").value.trim(),
       submittedAt: new Date().toISOString(),
       _gotcha: $("#a-gotcha") ? $("#a-gotcha").value : ""
     };
@@ -565,15 +546,9 @@
     ok = setErr("a-year", !$("#a-year").value ? "Select a graduation year." : "") && ok;
     ok = setErr("a-major", $("#a-major").value.trim().length < 2 ? "Enter your major." : "") && ok;
 
-    var picked = $$('input[name="interests"]:checked').length;
-    var ip = $('[data-err="interests"]');
-    if (ip) ip.textContent = picked ? "" : "Select at least one area.";
-    if (!picked) ok = false;
-
-    ok = setErr("a-why", $("#a-why").value.trim().length < 20 ? "Tell us a little more — 20 characters minimum." : "") && ok;
-    var li = $("#a-li").value.trim();
-    if (li && !/^https?:\/\/.+\..+/.test(li)) ok = setErr("a-li", "Use a full URL starting with https://") && ok;
-    else setErr("a-li", "");
+    var phone = $("#a-phone").value.trim();
+    if (phone && phone.replace(/[^0-9]/g, "").length < 7) ok = setErr("a-phone", "Enter a valid phone number.") && ok;
+    else setErr("a-phone", "");
 
     return ok;
   }
@@ -610,7 +585,7 @@
       $("#doneBody").textContent = res.message;
       $("#doneRows").innerHTML = [
         ["Name", data.name], ["Email", data.email],
-        ["Class of", data.gradYear], ["Focus", data.interests.join(", ")],
+        ["Class of", data.gradYear], ["Phone", data.phone],
         ["Filed", new Date().toLocaleString()]
       ].map(function (r) { return "<div><dt>" + esc(r[0]) + "</dt><dd>" + esc(r[1] || "—") + "</dd></div>"; }).join("");
       $("#applyDone").hidden = false;
@@ -643,11 +618,9 @@
         "Graduation year: " + data.gradYear,
         "Major: " + data.major,
         "Heard about us via: " + (data.referral || "—"),
-        "Areas of interest: " + data.interests.join(", "),
+        "Phone: " + (data.phone || "—"),
         "",
-        "Why YHCIC:", data.why, "",
         "Previous experience:", data.experience || "—", "",
-        "LinkedIn: " + (data.linkedin || "—"),
         "Submitted: " + new Date().toLocaleString()
       ].join("\n");
       var href = "mailto:" + A.email +

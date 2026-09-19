@@ -308,17 +308,7 @@
     </button>
 
     <aside class="apply__side">
-      <p class="apply__ref">Application № <span id="applyRef">—</span></p>
       <h2 id="apply-h">Membership<br><em>Application</em></h2>
-      <p class="apply__lede">Build conviction. Learn markets. Grow with the team.</p>
-
-      <div class="apply__process" aria-label="What happens after you submit">
-        <div class="proc"><span class="proc__n">01</span><span class="proc__t">Fill out the form — five minutes, honest answers.</span></div>
-        <div class="proc"><span class="proc__n">02</span><span class="proc__t">An officer reads every application. No interview to apply.</span></div>
-        <div class="proc"><span class="proc__n">03</span><span class="proc__t">We reply by email within a few days, either way.</span></div>
-      </div>
-
-      <p class="apply__fine">No prior finance experience required.<br>All majors, all years.</p>
     </aside>
 
     <div class="apply__main">
@@ -328,82 +318,53 @@
              submission; harmless no-op for the mailto fallback too. -->
         <input type="text" name="_gotcha" id="a-gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" class="hp">
 
+        <div class="fld">
+          <label for="a-name">Full name</label>
+          <input id="a-name" name="name" type="text" autocomplete="name" required>
+          <i class="fld__u" aria-hidden="true"></i>
+          <p class="fld__e" data-err="a-name"></p>
+        </div>
 
-        <section class="grp">
-          <p class="grp__eyebrow">01 &mdash; Identity</p>
-          <h3 class="step__title">Tell us who you are.</h3>
+        <div class="fld">
+          <label for="a-email">Young Harris College email</label>
+          <input id="a-email" name="email" type="email" inputmode="email" autocomplete="email" placeholder="you@yhc.edu" required>
+          <i class="fld__u" aria-hidden="true"></i>
+          <p class="fld__e" data-err="a-email"></p>
+        </div>
 
+        <div class="fld-row">
           <div class="fld">
-            <label for="a-name">Full name</label>
-            <input id="a-name" name="name" type="text" autocomplete="name" required>
+            <label for="a-year">Graduation year</label>
+            <select id="a-year" name="gradYear" required></select>
             <i class="fld__u" aria-hidden="true"></i>
-            <p class="fld__e" data-err="a-name"></p>
+            <p class="fld__e" data-err="a-year"></p>
           </div>
-
           <div class="fld">
-            <label for="a-email">Young Harris College email</label>
-            <input id="a-email" name="email" type="email" inputmode="email" autocomplete="email" placeholder="you@yhc.edu" required>
+            <label for="a-major">Major</label>
+            <input id="a-major" name="major" type="text" required>
             <i class="fld__u" aria-hidden="true"></i>
-            <p class="fld__e" data-err="a-email"></p>
+            <p class="fld__e" data-err="a-major"></p>
           </div>
+        </div>
 
-          <div class="fld-row">
-            <div class="fld">
-              <label for="a-year">Graduation year</label>
-              <select id="a-year" name="gradYear" required></select>
-              <i class="fld__u" aria-hidden="true"></i>
-              <p class="fld__e" data-err="a-year"></p>
-            </div>
-            <div class="fld">
-              <label for="a-major">Major</label>
-              <input id="a-major" name="major" type="text" required>
-              <i class="fld__u" aria-hidden="true"></i>
-              <p class="fld__e" data-err="a-major"></p>
-            </div>
-          </div>
+        <div class="fld">
+          <label for="a-src">How did you hear about YHCIC <em>optional</em></label>
+          <select id="a-src" name="referral"></select>
+          <i class="fld__u" aria-hidden="true"></i>
+        </div>
 
-          <div class="fld">
-            <label for="a-src">How did you hear about YHCIC <em>optional</em></label>
-            <select id="a-src" name="referral"></select>
-            <i class="fld__u" aria-hidden="true"></i>
-          </div>
-        </section>
+        <div class="fld fld--loose">
+          <label for="a-exp">Previous investing or finance experience <em>optional</em></label>
+          <textarea id="a-exp" name="experience" rows="3" placeholder="Courses, internships, a brokerage account, nothing at all — all honest answers are fine."></textarea>
+          <i class="fld__u" aria-hidden="true"></i>
+        </div>
 
-        <section class="grp">
-          <p class="grp__eyebrow">02 &mdash; Focus</p>
-          <h3 class="step__title">Where do you want to work?</h3>
-          <p class="step__hint">Pick every area you would like to contribute to. You are not locked in.</p>
-
-          <div class="picks" id="applyPicks"></div>
-          <p class="fld__e" data-err="interests"></p>
-
-          <div class="fld fld--loose">
-            <label for="a-exp">Previous investing or finance experience <em>optional</em></label>
-            <textarea id="a-exp" name="experience" rows="3" placeholder="Courses, internships, a brokerage account, nothing at all — all honest answers are fine."></textarea>
-            <i class="fld__u" aria-hidden="true"></i>
-          </div>
-        </section>
-
-        <section class="grp">
-          <p class="grp__eyebrow">03 &mdash; Motivation</p>
-          <h3 class="step__title">Why YHCIC?</h3>
-          <p class="step__hint">Two or three sentences. We read every one.</p>
-
-          <div class="fld">
-            <label for="a-why">Your answer</label>
-            <textarea id="a-why" name="why" rows="5" required></textarea>
-            <i class="fld__u" aria-hidden="true"></i>
-            <p class="fld__count"><span id="whyCount">0</span> / 600</p>
-            <p class="fld__e" data-err="a-why"></p>
-          </div>
-
-          <div class="fld">
-            <label for="a-li">LinkedIn <em>optional</em></label>
-            <input id="a-li" name="linkedin" type="url" placeholder="https://linkedin.com/in/…">
-            <i class="fld__u" aria-hidden="true"></i>
-            <p class="fld__e" data-err="a-li"></p>
-          </div>
-        </section>
+        <div class="fld">
+          <label for="a-phone">Phone number <em>optional</em></label>
+          <input id="a-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="(706) 555-0123">
+          <i class="fld__u" aria-hidden="true"></i>
+          <p class="fld__e" data-err="a-phone"></p>
+        </div>
 
         <div class="apply__nav">
           <button class="navbtn navbtn--send" type="submit">
