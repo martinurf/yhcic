@@ -67,9 +67,9 @@ window.YHCIC = {
      inherent to a no-backend static site. Use a free-tier key meant
      for exactly this, never a paid/high-limit one.               */
   market: {
-    isLive: false,
+    isLive: true,
     provider: "finnhub",
-    apiKey: null,
+    apiKey: "danbtmpr01qr00orb2s0danbtmpr01qr00orb2sg",
     refreshMs: 60000,
     rows: [
       { symbol: "S&P 500", ticker: "SPY",  value: "5,137.08",  change: "+1.24%", dir: 1, spark: [12, 14, 11, 15, 18, 16, 21, 19, 24, 27] },
