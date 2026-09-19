@@ -68,7 +68,10 @@
     function tick() {
       m.rows.forEach(function (row) {
         if (!row.ticker) return;
+        row.__seq = (row.__seq || 0) + 1; /* a slow response from an earlier tick must never overwrite a newer one */
+        var seq = row.__seq;
         fetchQuote(row.ticker, key).then(function (q) {
+          if (seq !== row.__seq) return; /* superseded by a later request for this same row */
           if (typeof q.c !== "number" || !q.c) return;
           row.value = fmtPrice(q.c);
           row.dir = (q.dp || 0) < 0 ? -1 : 1;
@@ -236,10 +239,17 @@
     }
 
     var hero = $(".hero");
+    var retargetTimer = null;
+    function startRetarget() { if (!retargetTimer) retargetTimer = setInterval(retarget, 4600); }
+    function stopRetarget() { if (retargetTimer) { clearInterval(retargetTimer); retargetTimer = null; } }
+
+    /* both the paint loop and the retarget interval pause once the hero
+       scrolls out of view, instead of ticking for the whole life of the tab */
     if (hero && "IntersectionObserver" in window) {
       new IntersectionObserver(function (e) {
         visible = e[0].isIntersecting;
-        if (visible && !running) { running = true; requestAnimationFrame(frame); }
+        if (visible) { if (!running) { running = true; requestAnimationFrame(frame); } startRetarget(); }
+        else { stopRetarget(); }
       }, { threshold: 0 }).observe(hero);
     }
     setTimeout(function () {
@@ -247,7 +257,7 @@
       scene.trend.style.strokeDasharray = "none";
       scene.trend.style.strokeDashoffset = "0";
       running = true; requestAnimationFrame(frame);
-      retarget(); setInterval(retarget, 4600);
+      retarget(); startRetarget();
     }, 4400);
   }
 
@@ -278,7 +288,15 @@
   function parallax() {
     if (reduce) return;
     var bg = $("#marketBg"); if (!bg) return;
-    var tx = 0, ty = 0, cx = 0, cy = 0, raf = null;
+    var tx = 0, ty = 0, cx = 0, cy = 0, raf = null, visible = true;
+
+    var hero = $(".hero");
+    if (hero && "IntersectionObserver" in window) {
+      new IntersectionObserver(function (e) {
+        visible = e[0].isIntersecting;
+        bg.classList.toggle("is-idle", !visible); /* also pauses the CSS atmosphere animation off-screen */
+      }, { threshold: 0 }).observe(hero);
+    }
 
     function loop() {
       cx += (tx - cx) * 0.06; cy += (ty - cy) * 0.06;
@@ -286,14 +304,18 @@
       if (Math.abs(tx - cx) > 0.04 || Math.abs(ty - cy) > 0.04) raf = requestAnimationFrame(loop);
       else raf = null;
     }
-    function kick() { if (!raf) raf = requestAnimationFrame(loop); }
+    function kick() { if (visible && !raf) raf = requestAnimationFrame(loop); }
 
+    /* skip the work entirely once the hero has scrolled out of view —
+       no point computing a transform nobody can see on every pointer move */
     window.addEventListener("pointermove", function (e) {
+      if (!visible) return;
       tx = (e.clientX / window.innerWidth - 0.5) * 8;
       ty = (e.clientY / window.innerHeight - 0.5) * 8;
       kick();
     }, { passive: true });
     window.addEventListener("touchmove", function (e) {
+      if (!visible) return;
       var t = e.touches && e.touches[0]; if (!t) return;
       tx = (t.clientX / window.innerWidth - 0.5) * 10;
       ty = (t.clientY / window.innerHeight - 0.5) * 10;
@@ -330,10 +352,18 @@
   function cardLight() {
     if (reduce) return;
     $$(".card").forEach(function (c) {
+      var raf = null, lastX = 0;
+      /* batch the layout read + style write to once per frame — a raw
+         pointermove can fire far more often than the screen repaints */
       c.addEventListener("pointermove", function (e) {
-        var r = c.getBoundingClientRect();
-        c.style.setProperty("--mx", (((e.clientX - r.left) / r.width) * 100).toFixed(1) + "%");
-      });
+        lastX = e.clientX;
+        if (raf) return;
+        raf = requestAnimationFrame(function () {
+          raf = null;
+          var r = c.getBoundingClientRect();
+          c.style.setProperty("--mx", (((lastX - r.left) / r.width) * 100).toFixed(1) + "%");
+        });
+      }, { passive: true });
     });
   }
 
@@ -368,7 +398,12 @@
       });
     }, { rootMargin: "0px 0px -8% 0px", threshold: 0.08 });
     targets.forEach(function (t) { io.observe(t); });
-    setTimeout(showAll, 7000);
+    /* a true worst-case fallback only — long enough that no real visitor
+       scrolling at a normal pace ever hits it and gets content forced to
+       its revealed state before they've scrolled there themselves; short
+       enough to still guarantee nothing stays invisible if the observer
+       genuinely never fires. */
+    setTimeout(showAll, 20000);
   }
 
   /* ---------------------------------------------------------
@@ -377,6 +412,7 @@
   var lastFocus = null;
 
   function openLayer(el, isMenu) {
+    if (el.__hideTimer) { clearTimeout(el.__hideTimer); el.__hideTimer = null; } /* cancel a pending close from a quick close→reopen */
     lastFocus = document.activeElement;
     el.hidden = false; el.getBoundingClientRect(); el.classList.add("open");
     document.body.classList.add("body-lock");
@@ -387,13 +423,30 @@
 
   function closeLayer(el) {
     el.classList.remove("open");
-    setTimeout(function () { el.hidden = true; }, reduce ? 0 : 400);
+    if (el.__hideTimer) clearTimeout(el.__hideTimer);
+    el.__hideTimer = setTimeout(function () { el.hidden = true; el.__hideTimer = null; }, reduce ? 0 : 400);
     document.body.classList.remove("body-lock");
     $("#burger").setAttribute("aria-expanded", "false");
     if (lastFocus && lastFocus.focus) lastFocus.focus({ preventScroll: true });
   }
 
   function anyOpen() { return $(".menu.open") || $(".apply.open"); }
+
+  /* if the last visit ended in a submitted receipt, put the overlay back
+     to a clean, blank form before it's shown again — never open on a
+     stale reference number and someone else's old answers. */
+  function resetApply() {
+    var form = $("#applyForm"), done = $("#applyDone");
+    if (!form || !done || done.hidden) return;
+    form.reset();
+    $$(".fld__e", form).forEach(function (p) { p.textContent = ""; });
+    $$('[aria-invalid="true"]', form).forEach(function (i) { i.removeAttribute("aria-invalid"); });
+    var status = $("#applyStatus"); if (status) { status.textContent = ""; status.removeAttribute("data-tone"); }
+    var count = $("#whyCount"); if (count) count.textContent = "0";
+    form.hidden = false; done.hidden = true;
+    REF = makeRef();
+    var refEl = $("#applyRef"); if (refEl) refEl.textContent = REF;
+  }
 
   function wireOverlays() {
     var menu = $("#menu"), burger = $("#burger"), apply = $("#apply");
@@ -405,7 +458,7 @@
       a.addEventListener("click", function (e) {
         if (a.hasAttribute("data-apply")) {
           e.preventDefault(); closeLayer(menu);
-          setTimeout(function () { openLayer(apply); }, 300);
+          setTimeout(function () { resetApply(); openLayer(apply); }, 300);
           return;
         }
         closeLayer(menu);
@@ -413,7 +466,7 @@
     });
     $$("[data-apply]").forEach(function (b) {
       if (b.closest(".menu")) return;
-      b.addEventListener("click", function (e) { e.preventDefault(); openLayer(apply); });
+      b.addEventListener("click", function (e) { e.preventDefault(); resetApply(); openLayer(apply); });
     });
     $$("[data-close]").forEach(function (b) {
       b.addEventListener("click", function () { closeLayer(apply); });

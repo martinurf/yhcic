@@ -180,6 +180,9 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   animation:atmosphere 36s ease-in-out infinite alternate;
   will-change:transform;
 }
+/* paused off-screen — set in JS by the same observer that gates parallax;
+   pure resource hygiene, no visual change while the hero is in view */
+.market-bg.is-idle{ animation-play-state:paused; will-change:auto; }
 .grid{
   position:absolute; inset:0;
   background-image:

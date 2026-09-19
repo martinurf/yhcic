@@ -48,7 +48,7 @@ GitHub Pages lo toma solo en 1–2 minutos. No hay build, no hay CI — lo que e
 - **Fuentes:** Bodoni Moda (wordmark), Newsreader (editorial), Inter (datos/UI). Vía Google Fonts con fallbacks reales.
 - **Escena del hero:** un solo SVG (grid, dos cordilleras, velas, chart). El chart se dibuja con `stroke-dashoffset` (~1.35s) y después sigue vivo: cada 3.4s mueve un punto y cada tanto pulsa un dato. Nunca se mueve la curva entera.
 - **Parallax:** por capa (`data-depth`), puntero en desktop y scroll en móvil, 3–10px. Se apaga con `prefers-reduced-motion`.
-- **Revelados de scroll:** vocabulario mixto (máscara, clip-path, dibujo de trazo, desenfoque que resuelve, stagger), no fade-up genérico. Hay un timeout de seguridad a 6s: nada queda invisible si falla el observer.
+- **Revelados de scroll:** vocabulario mixto (máscara, clip-path, dibujo de trazo, desenfoque que resuelve, stagger), no fade-up genérico. Timeout de seguridad a 20s (solo para el caso raro de que el `IntersectionObserver` no dispare nunca) — lo bastante largo como para que nadie scrolleando a ritmo normal vea su contenido forzado antes de llegar a él.
 - **Accesibilidad:** HTML semántico, focus visible, trap de foco y ESC en menú y modales, labels reales, `aria-invalid` en errores, `prefers-reduced-motion` respetado.
 
 ## Pendiente real (no está hecho y no debería fingirse)
