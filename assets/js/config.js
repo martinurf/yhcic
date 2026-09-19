@@ -28,7 +28,7 @@ window.YHCIC = {
      enable real submission. While null, the form validates and
      reports that no backend is connected — it never fakes a save. */
   application: {
-    endpoint: null,
+    endpoint: "https://formspree.io/f/xkjgonaa",
     /* While endpoint is null the form opens the applicant's mail client
        with everything pre-filled and addressed here. Replace with the
        real officer inbox. */
