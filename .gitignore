@@ -1,0 +1,18 @@
+# OS cruft
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor
+.vscode/
+.idea/
+*.swp
+
+# Deploy tooling (local auth/cache — never commit)
+.vercel/
+.netlify/
+
+# Never commit real secrets if someone ever adds a local override file
+*.local.js
+.env
+.env.*

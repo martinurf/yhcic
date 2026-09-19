@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://martinurf.github.io/yhcic/sitemap.xml
