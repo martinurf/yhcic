@@ -31,7 +31,7 @@
     var body = $("#boardTable tbody"), tag = $("#boardTag");
     var m = C.market || { rows: [] };
     if (!body) return;
-    var live = !!(m.isLive && m.apiKey);
+    var live = !!(m.isLive && m.proxyUrl);
     if (tag) tag.textContent = live ? "Live" : "Illustrative";
     body.innerHTML = (m.rows || []).map(function (r) {
       var neg = r.dir === -1;
@@ -44,8 +44,8 @@
     }).join("");
   }
 
-  /* ---- live quotes (Finnhub) ---------------------------------
-     Only runs when isLive is true AND an apiKey is set — otherwise
+  /* ---- live quotes, via our own proxy (assets/js/config.js → market.proxyUrl) --
+     Only runs when isLive is true AND a proxyUrl is set — otherwise
      the board stays exactly as configured, labelled Illustrative.
      On any fetch failure a row silently keeps its last known value;
      the board never shows a broken or fake number. */
