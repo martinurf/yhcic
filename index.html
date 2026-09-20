@@ -58,9 +58,9 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<!-- only the weights site.css actually sets: Bodoni 400, Fraunces 900 (wordmark
-     only), Newsreader 300/400, Inter 400/500/600 — no unused weight requested -->
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400&family=Fraunces:opsz,wght@9..144,900&family=Newsreader:opsz,wght@6..72,300;6..72,400&family=Inter:wght@400;500;600&display=swap">
+<!-- only the weights site.css actually sets: Bodoni 400 (body/display) and
+     900 (wordmark), Newsreader 300/400, Inter 400/500/600 — no unused weight requested -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,900&family=Newsreader:opsz,wght@6..72,300;6..72,400&family=Inter:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="assets/css/site.css">
 </head>
 <body>
@@ -88,7 +88,7 @@
     <nav class="menu__nav" aria-label="Main">
       <a href="#top"><em>01</em> Home</a>
       <a href="#who"><em>02</em> Who We Are</a>
-      <span class="soon"><em>03</em> Goals <b>Soon</b></span>
+      <a href="goals.html"><em>03</em> Goals</a>
       <span class="soon"><em>04</em> Projects <b>Soon</b></span>
       <span class="soon"><em>05</em> Members <b>Soon</b></span>
       <a href="#apply" data-apply><em>06</em> Join YHCIC</a>
@@ -178,19 +178,19 @@
   </div>
 
   <div class="cards">
-    <article class="card" data-seq="c1">
+    <a class="card" href="goals.html" data-seq="c1">
       <span class="card__icon" aria-hidden="true">
         <svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="11"/><circle cx="16" cy="16" r="6.2"/><circle cx="16" cy="16" r="1.9"/><path d="M16 5V2M16 30v-3M5 16H2M30 16h-3"/></svg>
       </span>
       <span class="card__text">
-        <span class="card__title">Goals<span class="card__soon">Soon</span></span>
+        <span class="card__title">Goals</span>
         <span class="card__sub">A higher standard.</span>
       </span>
       <span class="card__arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 12h15"/><path d="M13.5 6.5 20 12l-6.5 5.5"/></svg></span>
       <span class="card__art card__art--ink" aria-hidden="true">
         <img src="assets/img/campus.jpg" srcset="assets/img/campus-380.jpg 380w, assets/img/campus.jpg 760w" sizes="(min-width:760px) 282px, 35vw" alt="" width="760" height="322" loading="lazy" decoding="async">
       </span>
-    </article>
+    </a>
 
     <article class="card" data-seq="c2">
       <span class="card__icon" aria-hidden="true">

@@ -393,10 +393,22 @@
     var showAll = function () { targets.forEach(function (t) { t.classList.add("in"); }); };
     if (reduce || !("IntersectionObserver" in window)) { showAll(); return; }
     /* replays every time — scroll past and back down and it comes in again,
-       just as subtly, instead of only ever playing once per page load */
+       just as subtly, instead of only ever playing once per page load.
+       Hiding is debounced (showing isn't): jumping straight to a section
+       via a menu link (href="#who") fires the native smooth-scroll at
+       the same time the menu overlay is still closing, and that combo
+       can make the observer see a brief false "not intersecting" mid-
+       scroll — without this, that toggled the title back out and it
+       looked like it "loaded late" once the scroll actually settled. */
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (en) {
-        en.target.classList.toggle("in", en.isIntersecting);
+        var t = en.target;
+        if (en.isIntersecting) {
+          if (t.__hideT) { clearTimeout(t.__hideT); t.__hideT = null; }
+          t.classList.add("in");
+        } else if (t.classList.contains("in")) {
+          t.__hideT = setTimeout(function () { t.classList.remove("in"); }, 250);
+        }
       });
     }, { rootMargin: "0px 0px -8% 0px", threshold: 0.08 });
     targets.forEach(function (t) { io.observe(t); });

@@ -35,10 +35,11 @@
   --radius: 3px;
 
   --ff-display: "Bodoni Moda", "Didot", "Times New Roman", serif;
-  /* wordmark only — Bodoni's razor-thin hairlines are its whole character
-     as a didone, no weight fixes that; Fraunces Black keeps a serif,
-     editorial, premium feel with far more uniform, confident strokes. */
-  --ff-logo: "Fraunces", "Bodoni Moda", "Didot", "Times New Roman", serif;
+  /* Fraunces Black was tried here for more uniform strokes at giant
+     size, but its default soft/wonky personality read as cartoonish —
+     the wrong register for a financial firm. Bodoni's thin hairlines
+     are the point of a didone, not a flaw to fix. */
+  --ff-logo: var(--ff-display);
   --ff-edit:    "Newsreader", "Iowan Old Style", Georgia, serif;
   --ff-ui:      "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --ff-mono:    ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
