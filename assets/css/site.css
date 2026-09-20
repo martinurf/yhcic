@@ -679,10 +679,10 @@ a.staylink:hover{ opacity:.7; }
 
 .fld{ position:relative; display:flex; flex-direction:column; gap:6px; min-width:0; }
 .fld label{
-  font-family:var(--ff-mono); font-size:9px; letter-spacing:.2em;
-  text-transform:uppercase; color:var(--vault-mute);
+  font-family:var(--ff-mono); font-size:11px; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--vault-accent-2); opacity:.82;
 }
-.fld label em{ font-style:normal; color:rgba(154,144,176,.55); }
+.fld label em{ font-style:normal; color:rgba(154,144,176,.7); }
 .fld input,.fld textarea,.fld select{
   width:100%; background:transparent; color:var(--vault-ink);
   border:0; border-bottom:1px solid var(--vault-rule); border-radius:0;
