@@ -392,9 +392,11 @@
     });
     var showAll = function () { targets.forEach(function (t) { t.classList.add("in"); }); };
     if (reduce || !("IntersectionObserver" in window)) { showAll(); return; }
+    /* replays every time — scroll past and back down and it comes in again,
+       just as subtly, instead of only ever playing once per page load */
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (en) {
-        if (en.isIntersecting) { en.target.classList.add("in"); io.unobserve(en.target); }
+        en.target.classList.toggle("in", en.isIntersecting);
       });
     }, { rootMargin: "0px 0px -8% 0px", threshold: 0.08 });
     targets.forEach(function (t) { io.observe(t); });

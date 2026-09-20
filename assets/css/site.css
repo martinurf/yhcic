@@ -291,7 +291,7 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
 }
 .lockup__over{ font-family:var(--ff-display); font-weight:400; font-size:clamp(12px,2.6vw,19px); letter-spacing:.3em; text-transform:uppercase; color:var(--ink-2); }
 .lockup__word{
-  font-family:var(--ff-display); font-weight:700;
+  font-family:var(--ff-display); font-weight:900;
   font-size:clamp(76px,18.5vw,208px); line-height:.96; letter-spacing:.005em;
   margin-block:clamp(2px,1vw,8px);
   background:linear-gradient(97deg,var(--purple-deep) 12%,var(--purple) 52%,var(--purple-deep) 88%);
@@ -594,7 +594,7 @@ a.staylink:hover{ opacity:.7; }
   letter-spacing:.44em; text-transform:uppercase; color:var(--muted); padding-left:.44em;
 }
 .foot__wordmark{
-  font-family:var(--ff-display); font-weight:700;
+  font-family:var(--ff-display); font-weight:900;
   font-size:clamp(66px,19vw,248px); line-height:.92; letter-spacing:.015em; padding-bottom:.02em;
   background:linear-gradient(176deg,var(--purple-deep) 6%,var(--purple) 46%,#8B44C4 96%);
   -webkit-background-clip:text; background-clip:text;
@@ -758,8 +758,15 @@ html.anim .lockup__over[data-seq]{ letter-spacing:.46em; }
 html.anim .lockup__over[data-seq].on{ letter-spacing:.3em; }
 html.anim .lockup__under[data-seq]{ letter-spacing:.5em; }
 html.anim .lockup__under[data-seq].on{ letter-spacing:.34em; }
-html.anim .lockup__word[data-seq]{ letter-spacing:.06em; }
-html.anim .lockup__word[data-seq].on{ letter-spacing:.005em; }
+/* the wordmark is the page's centerpiece — it settles into place slowly
+   and softly instead of snapping up like the smaller labels around it */
+html.anim .lockup__word[data-seq]{ letter-spacing:.06em; filter:blur(18px); }
+html.anim .lockup__word[data-seq].on{
+  letter-spacing:.005em; filter:blur(0);
+  transition:opacity 2.4s var(--ease-soft) var(--d,0s), transform 2s var(--ease-soft) var(--d,0s),
+             filter 2.6s var(--ease-soft) var(--d,0s), letter-spacing 2.8s var(--ease-soft) var(--d,0s);
+}
+html.anim .lockup__word[data-seq].on .mask > span{ transition:transform 2.2s var(--ease-soft) var(--d,0s); }
 html.anim .btn[data-seq]{ transform:translateY(8px); }
 html.anim .btn[data-seq].on{ transform:none; }
 html.anim .card[data-seq]{ transform:translateY(6px); clip-path:inset(0 100% 0 0); }
