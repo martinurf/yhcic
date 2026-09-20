@@ -35,11 +35,13 @@
   --radius: 3px;
 
   --ff-display: "Bodoni Moda", "Didot", "Times New Roman", serif;
-  /* Fraunces Black was tried here for more uniform strokes at giant
-     size, but its default soft/wonky personality read as cartoonish —
-     the wrong register for a financial firm. Bodoni's thin hairlines
-     are the point of a didone, not a flaw to fix. */
-  --ff-logo: var(--ff-display);
+  /* Wordmark only. Two things already ruled out here: Bodoni itself
+     (its thin didone hairlines disappear/blur together at this size),
+     then Fraunces Black (reads soft and cartoonish no matter the
+     weight — the wrong register for a financial firm). DM Serif
+     Display has real, confident stroke weight with none of Fraunces'
+     bulbous roundness — sharp serifs, upright, no gimmicks. */
+  --ff-logo: "DM Serif Display", "Bodoni Moda", "Didot", "Times New Roman", serif;
   --ff-edit:    "Newsreader", "Iowan Old Style", Georgia, serif;
   --ff-ui:      "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --ff-mono:    ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
@@ -296,7 +298,10 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
 }
 .lockup__over{ font-family:var(--ff-display); font-weight:400; font-size:clamp(12px,2.6vw,19px); letter-spacing:.3em; text-transform:uppercase; color:var(--ink-2); }
 .lockup__word{
-  font-family:var(--ff-logo); font-weight:900;
+  /* DM Serif Display ships one weight (400) that's already this
+     heavy — 900 here would just fake-bold a font that has no such
+     file, and synthetic bold on a serif looks smeared, not bolder. */
+  font-family:var(--ff-logo); font-weight:400;
   font-size:clamp(76px,18.5vw,208px); line-height:.96; letter-spacing:.005em;
   margin-block:clamp(2px,1vw,8px);
   background:linear-gradient(97deg,var(--purple-deep) 12%,var(--purple) 52%,var(--purple-deep) 88%);
@@ -599,7 +604,7 @@ a.staylink:hover{ opacity:.7; }
   letter-spacing:.44em; text-transform:uppercase; color:var(--muted); padding-left:.44em;
 }
 .foot__wordmark{
-  font-family:var(--ff-logo); font-weight:900;
+  font-family:var(--ff-logo); font-weight:400;
   font-size:clamp(66px,19vw,248px); line-height:.92; letter-spacing:.015em; padding-bottom:.02em;
   background:linear-gradient(176deg,var(--purple-deep) 6%,var(--purple) 46%,#8B44C4 96%);
   -webkit-background-clip:text; background-clip:text;
