@@ -1,0 +1,26 @@
+name: Site checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: JS syntax check
+        run: |
+          node --check assets/js/config.js
+          node --check assets/js/site.js
+          node --check assets/js/motion-check.js
+
+      - name: Asset references, duplicate IDs, internal anchors, JSON-LD
+        run: node scripts/check-site.mjs

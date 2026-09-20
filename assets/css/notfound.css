@@ -1,0 +1,34 @@
+/* ============================================================
+   404 — same paper/vault system as the main site, own tiny layout.
+   ============================================================ */
+.nf{
+  min-height:100vh; min-height:100dvh;
+  display:flex; align-items:center; justify-content:center;
+  background:var(--vault); color:var(--vault-ink); position:relative; overflow:hidden;
+  padding:var(--gut);
+}
+.nf__grid{
+  position:absolute; inset:0; pointer-events:none;
+  background-image:
+    linear-gradient(rgba(180,143,224,.09) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(180,143,224,.09) 1px,transparent 1px);
+  background-size:56px 56px;
+  -webkit-mask-image:radial-gradient(60% 60% at 50% 40%,#000,transparent 75%);
+  mask-image:radial-gradient(60% 60% at 50% 40%,#000,transparent 75%);
+}
+.nf__in{
+  position:relative; z-index:1; display:flex; flex-direction:column; align-items:center;
+  text-align:center; gap:14px; max-width:46ch;
+}
+.nf__mark{ margin-bottom:clamp(20px,4vw,36px); }
+.nf__code{
+  font-family:var(--ff-display); font-weight:900; font-size:clamp(64px,14vw,120px); line-height:.9;
+  background:linear-gradient(97deg,var(--vault-accent) 12%,var(--purple-soft) 52%,var(--vault-accent) 88%);
+  -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; color:transparent;
+}
+.nf__title{
+  font-family:var(--ff-edit); font-weight:300; font-size:clamp(20px,3.4vw,30px);
+  color:var(--vault-ink); margin-top:6px;
+}
+.nf__body{ font-size:14.5px; line-height:1.7; color:var(--vault-mute); }
+.nf__btn{ margin-top:clamp(14px,2.6vw,22px); }

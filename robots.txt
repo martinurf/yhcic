@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://martinurf.github.io/yhcic/sitemap.xml
+Sitemap: https://yhcic.vercel.app/sitemap.xml

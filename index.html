@@ -9,6 +9,10 @@
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 <link rel="mask-icon" href="assets/img/favicon.svg" color="#47217A">
 <meta name="theme-color" content="#14111C">
+<!-- canonical: the site is live on Vercel and GitHub Pages with identical
+     content — this tells search engines which one is the "real" one, so
+     the two don't compete against each other or split ranking signal. -->
+<link rel="canonical" href="https://yhcic.vercel.app/">
 
 <!-- Security: the strongest versions of these (X-Frame-Options, HSTS,
      X-Content-Type-Options) only work as real HTTP headers, sent by
@@ -17,27 +21,45 @@
      site with no user accounts: a script or style from anywhere but
      this site's own files and Google Fonts. No 'unsafe-inline' on
      script-src — every script here lives in assets/js/. -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://finnhub.io https://formspree.io; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://finnhub.io https://formspree.io https://vitals.vercel-insights.com; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <link rel="preload" as="script" href="assets/js/motion-check.js">
 
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="YHCIC">
+<meta property="og:url" content="https://yhcic.vercel.app/">
 <meta property="og:title" content="YHCIC — Young Harris College Investment Club">
 <meta property="og:description" content="A student-led research community focused on markets, analysis and long-term thinking. Founding cohort, 2026.">
-<meta property="og:image" content="assets/img/og-card.png">
+<meta property="og:image" content="https://yhcic.vercel.app/assets/img/og-card.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="YHCIC — Young Harris College Investment Club">
 <meta name="twitter:description" content="A student-led research community focused on markets, analysis and long-term thinking.">
-<meta name="twitter:image" content="assets/img/og-card.png">
+<meta name="twitter:image" content="https://yhcic.vercel.app/assets/img/og-card.png">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Young Harris College Investment Club",
+  "alternateName": "YHCIC",
+  "url": "https://yhcic.vercel.app/",
+  "logo": "https://yhcic.vercel.app/assets/img/og-card.png",
+  "description": "A student-led research community at Young Harris College focused on markets, analysis and long-term thinking. Founding cohort, 2026.",
+  "foundingDate": "2026",
+  "sameAs": [
+    "https://www.instagram.com/yhcinvestmentclub",
+    "https://groupme.com/join_group/117609260/PAyikBkY"
+  ]
+}
+</script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<!-- only the weights site.css actually sets: Bodoni 400/700, Newsreader 300/400, Inter 400/500/600 —
-     500 (Bodoni) and 200/500 (Newsreader) were being downloaded on every first visit unused -->
+<!-- only the weights site.css actually sets: Bodoni 400/900, Newsreader 300/400, Inter 400/500/600 —
+     no unused weight in the request, so nothing downloads that never paints -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,900&family=Newsreader:opsz,wght@6..72,300;6..72,400&family=Inter:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="assets/css/site.css">
 </head>
@@ -392,5 +414,9 @@
 
 <script src="assets/js/config.js"></script>
 <script src="assets/js/site.js"></script>
+<!-- Vercel Web Analytics — no-ops harmlessly on GitHub Pages (404s silently,
+     deferred, nothing depends on it). Enable it in the Vercel dashboard:
+     Project → Analytics → Enable. -->
+<script defer src="/_vercel/insights/script.js"></script>
 </body>
 </html>
