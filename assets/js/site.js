@@ -55,31 +55,31 @@
     return n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   }
 
-  function fetchQuote(ticker, key) {
-    return fetch("https://finnhub.io/api/v1/quote?symbol=" + encodeURIComponent(ticker) + "&token=" + encodeURIComponent(key))
-      .then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); });
+  /* one call to our own read-only proxy — it holds the Finnhub key now,
+     never this file. One request for every row instead of one per row,
+     so there's no per-row race to guard against anymore either. */
+  function fetchQuotes(url) {
+    return fetch(url).then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); });
   }
 
   function startLiveMarket() {
     var m = C.market || {};
-    if (!(m.isLive && m.apiKey && (m.rows || []).length)) return;
-    var key = m.apiKey;
+    if (!(m.isLive && m.proxyUrl && (m.rows || []).length)) return;
 
     function tick() {
-      m.rows.forEach(function (row) {
-        if (!row.ticker) return;
-        row.__seq = (row.__seq || 0) + 1; /* a slow response from an earlier tick must never overwrite a newer one */
-        var seq = row.__seq;
-        fetchQuote(row.ticker, key).then(function (q) {
-          if (seq !== row.__seq) return; /* superseded by a later request for this same row */
-          if (typeof q.c !== "number" || !q.c) return;
-          row.value = fmtPrice(q.c);
-          row.dir = (q.dp || 0) < 0 ? -1 : 1;
-          row.change = ((q.dp || 0) >= 0 ? "+" : "") + (q.dp || 0).toFixed(2) + "%";
-          row.spark = (row.spark || []).concat([q.c]).slice(-10);
-          renderBoard();
-        }).catch(function () { /* keep last known value — never fake a tick */ });
-      });
+      fetchQuotes(m.proxyUrl).then(function (data) {
+        var byTicker = {};
+        (data.quotes || []).forEach(function (q) { byTicker[q.symbol] = q; });
+        m.rows.forEach(function (row) {
+          var q = row.ticker && byTicker[row.ticker];
+          if (!q || !q.ok || typeof q.price !== "number" || !q.price) return;
+          row.value = fmtPrice(q.price);
+          row.dir = (q.changePercent || 0) < 0 ? -1 : 1;
+          row.change = ((q.changePercent || 0) >= 0 ? "+" : "") + (q.changePercent || 0).toFixed(2) + "%";
+          row.spark = (row.spark || []).concat([q.price]).slice(-10);
+        });
+        renderBoard();
+      }).catch(function () { /* keep last known values — never fake a tick */ });
     }
     tick();
     if (LIVE_TIMER) clearInterval(LIVE_TIMER);

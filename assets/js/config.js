@@ -55,21 +55,16 @@ window.YHCIC = {
 
   /* ---- Market board -----------------------------------------
      isLive=false → static, labelled Illustrative — nothing is faked.
-     To go live: create a free key at finnhub.io/register (no card,
-     client-side CORS works out of the box), paste it as apiKey below,
-     and set isLive to true. Every row then polls its `ticker` on
-     refreshMs and the tag switches to Live automatically.
+     The Finnhub key is NOT here anymore — it lives server-side only,
+     in the yhcic-market Vercel project (github.com/martinurf/yhcic-market).
+     This file just points at that proxy's one public endpoint.
      Note: free-tier quote APIs don't expose raw index levels, so the
      two index rows track them via their benchmark ETFs (SPY for the
      S&P 500, QQQ for the Nasdaq-100) — standard practice, called out
-     here for honesty.
-     A client-side key is visible to anyone who views the page source —
-     inherent to a no-backend static site. Use a free-tier key meant
-     for exactly this, never a paid/high-limit one.               */
+     here for honesty.                                            */
   market: {
     isLive: true,
-    provider: "finnhub",
-    apiKey: "danbtmpr01qr00orb2s0danbtmpr01qr00orb2sg",
+    proxyUrl: "https://yhcic-market.vercel.app/api/quotes",
     refreshMs: 60000,
     rows: [
       { symbol: "S&P 500", ticker: "SPY",  value: "5,137.08",  change: "+1.24%", dir: 1, spark: [12, 14, 11, 15, 18, 16, 21, 19, 24, 27] },
